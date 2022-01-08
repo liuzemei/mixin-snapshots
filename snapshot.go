@@ -56,7 +56,13 @@ VALUES ($1, $2, $3, $4, $5, $6)`,
 func getSnapshotsByDay(ctx context.Context, startAt time.Time) ([]*Snapshot, error) {
 	res := make([]*Snapshot, 0)
 	endAt := startAt.Add(time.Hour * 24)
-	rows, err := pool.Query(ctx, `SELECT snapshot_id,type,amount,asset_id,source,created_at FROM snapshots WHERE created_at>=$1 AND created_at<$2`, startAt, endAt)
+	rows, err := pool.Query(ctx, `
+SELECT snapshot_id,type,amount,asset_id,source,created_at 
+FROM snapshots 
+WHERE source IN ('DEPOSIT_CONFIRMED','WITHDRAWAL_INITIALIZED')
+AND created_at>=$1 
+AND created_at<$2
+`, startAt, endAt)
 	if err != nil {
 		return nil, err
 	}
