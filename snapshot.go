@@ -51,6 +51,9 @@ VALUES ($1, $2, $3, $4, $5, $6)`,
 	} else {
 		log.Println("getNewSnapshot 3", err)
 	}
+	if len(ss) == 500 {
+		getNewSnapshotAndSave(ctx)
+	}
 }
 
 func getSnapshotsByDay(ctx context.Context, startAt time.Time) ([]*Snapshot, error) {

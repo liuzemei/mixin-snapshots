@@ -152,6 +152,7 @@ func startMonthJob(ctx context.Context) {
 	c := cron.New(cron.WithLocation(time.UTC))
 	_, err := c.AddFunc("0 2 1 * *", func() {
 		log.Println("start month job")
+		statisticMonth(ctx)
 	})
 	if err != nil {
 		SendMsgToDeveloper(ctx, "定时任务StartMonthJob。。。出问题了。。。"+err.Error())
